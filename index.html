@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="4D Latent World Model for Robot Planning.">
+  <meta name="keywords" content="World model, Robot learning, 3D generation">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Prevent caching -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <title>4D Latent World Model for Robot Planning</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <!-- <link rel="icon" href="./static/images/favicon.svg"> -->
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+
+<body>
+
+  <!-- <nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://keunhong.com">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://hypernerf.github.io">
+            HyperNeRF
+          </a>
+          <a class="navbar-item" href="https://nerfies.github.io">
+            Nerfies
+          </a>
+          <a class="navbar-item" href="https://latentfusion.github.io">
+            LatentFusion
+          </a>
+          <a class="navbar-item" href="https://photoshape.github.io">
+            PhotoShape
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav> -->
+
+
+  <section class="hero" id="title">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">4D Latent World Model for Robot Planning</h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                Anonymous submission</span>
+              <!-- <span class="author-block">
+              <a href="https://keunhong.com">Keunhong Park</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://utkarshsinha.com">Utkarsh Sinha</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="https://jonbarron.info">Jonathan T. Barron</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="http://sofienbouaziz.com">Sofien Bouaziz</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.danbgoldman.com">Dan B Goldman</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://homes.cs.washington.edu/~seitz/">Steven M. Seitz</a><sup>1,2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="http://www.ricardomartinbrualla.com">Ricardo Martin-Brualla</a><sup>2</sup>
+            </span> -->
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <!-- <span class="author-block"><sup>1</sup>University of Washington,</span>
+            <span class="author-block"><sup>2</sup>Google Research</span> -->
+            </div>
+
+            <!-- <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2011.12948"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2011.12948"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/google/nerfies"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/google/nerfies/releases/tag/0.1"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Data</span>
+                  </a>
+            </div>
+
+          </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero teaser" id="teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+  <h2 class="subtitle has-text-centered"><span style="color: #c00; font-weight: 700; font-style: italic; font-size: 1.2em;">For reviewers: we update video demos for real-world experiments.</span></h2>
+        <img src="./static/images/1_teaser.png" alt="Teaser" height="100%">
+        <h2 class="subtitle has-text-centered">
+          Our 4D latent world model integrates multi-view images and text instructions to forecast future 3D dynamics,
+          enabling robots to plan and execute tasks that require precise 3D understanding.
+        </h2>
+      </div>
+    </div>
+  </section>
+  <!-- 
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-steve">
+          <video poster="" id="steve" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/steve.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-chair-tp">
+          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/chair-tp.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-shiba">
+          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/shiba.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-fullbody">
+          <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/fullbody.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-blueshirt">
+          <video poster="" id="blueshirt" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/blueshirt.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-mask">
+          <video poster="" id="mask" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/mask.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-coffee">
+          <video poster="" id="coffee" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/coffee.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-toby">
+          <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/toby2.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+
+  <section class="section" id="abstract">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              Learned world models are emerging as a powerful paradigm in robotics, offering a promising path toward
+              task generalization, long-horizon planning, and flexible decision-making. However, prevailing approaches
+              often operate on 2D video sequences, inherently lacking the 3D geometric understanding necessary for
+              precise spatial reasoning and physical consistency.
+              Recent work has begun to inject 3D signals into video world models (e.g., depth and normals), improving
+              spatial understanding but still operating on surface-level projections that can struggle under occlusion
+              and viewpoint changes.
+              To overcome this limitation, we introduce the \emph{4D Latent World Model}, which learns to predict the
+              evolution of a scene's 3D structure within a compact latent space, conditioned on observations and textual
+              instructions.
+              The latent space encodes the scene holistically and can be decoded into diverse 3D formats (e.g., 3D
+              Gaussian Splatting), enabling a more complete and physically consistent scene understanding.
+              This 4D latent world model serves as a planner, generating future scenes that are translated into
+              executable actions by a goal-conditioned inverse dynamics model.
+              Experiments demonstrate that our model generates futures with superior visual quality, physical
+              consistency, and multi-view coherence compared to state-of-the-art video-based planners.
+              Consequently, our full planning pipeline achieves superior performance on complex manipulation tasks,
+              exhibits robust generalization to novel visual conditions, and proves effective on real-world robotic
+              platforms.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!--/ Abstract. -->
+
+      <!-- Paper video. -->
+      <!-- <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Video</h2>
+        <div class="publication-video">
+          <iframe src="https://www.youtube.com/embed/MrKrnHhk8IA?rel=0&amp;showinfo=0"
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div> -->
+      <!--/ Paper video. -->
+    </div>
+  </section>
+
+
+
+  <section class="section" id="method-overview">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-max-desktop">
+          <h2 class="title is-3">Method overview</h2>
+          <img src="./static/images/3-1_modeloverview_v3.png" alt="Method Overview" height="100%">
+          <div class="content has-text-justified">
+            <p>
+              Our 4D latent world model integrates multi-view images and text instructions to forecast future 3D
+              dynamics, enabling robots to plan and execute tasks that require precise 3D understanding.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Video Gallery Section -->
+  <section class="section" id="robot-planning-results">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Robot planning results</h2>
+
+          <!-- Task 1: Put bowl on stove -->
+          <div class="content">
+            <h3 class="title is-5">Task: Put the bowl on the stove</h3>
+            <div class="columns is-multiline is-centered">
+              <div class="column is-3">
+                <img src="./static/videos/put_bowl_on_stove/0.gif" alt="Put bowl on stove - View 1"
+                  style="width: 100%; height: auto;">
+              </div>
+              <div class="column is-3">
+                <img src="./static/videos/put_bowl_on_stove/1.gif" alt="Put bowl on stove - View 2"
+                  style="width: 100%; height: auto;">
+              </div>
+              <div class="column is-3">
+                <img src="./static/videos/put_bowl_on_stove/2.gif" alt="Put bowl on stove - View 3"
+                  style="width: 100%; height: auto;">
+              </div>
+              <div class="column is-3">
+                <img src="./static/videos/put_bowl_on_stove/3.gif" alt="Put bowl on stove - View 4"
+                  style="width: 100%; height: auto;">
+              </div>
+            </div>
+          </div>
+
+          <!-- Task 2: Open the top drawer and put the bowl inside -->
+          <div class="content">
+            <h3 class="title is-5">Task: Open the top drawer and put the bowl inside</h3>
+            <div class="columns is-multiline is-centered">
+              <div class="column is-3">
+                <img src="./static/videos/open the top drawer and put the bowl inside/0.gif" alt="Open drawer - View 1"
+                  style="width: 100%; height: auto;">
+              </div>
+              <div class="column is-3">
+                <img src="./static/videos/open the top drawer and put the bowl inside/1.gif" alt="Open drawer - View 2"
+                  style="width: 100%; height: auto;">
+              </div>
+              <div class="column is-3">
+                <img src="./static/videos/open the top drawer and put the bowl inside/2.gif" alt="Open drawer - View 3"
+                  style="width: 100%; height: auto;">
+              </div>
+              <div class="column is-3">
+                <img src="./static/videos/open the top drawer and put the bowl inside/3.gif" alt="Open drawer - View 4"
+                  style="width: 100%; height: auto;">
+              </div>
+            </div>
+          </div>
+
+          <!-- Task 3: Put the bowl on the plate -->
+          <div class="content">
+            <h3 class="title is-5">Task: Put the bowl on the plate</h3>
+            <div class="columns is-multiline is-centered">
+              <div class="column is-3">
+                <img src="./static/videos/put the bowl on the plate /0.gif" alt="Bowl on plate - View 1"
+                  style="width: 100%; height: auto;">
+              </div>
+              <div class="column is-3">
+                <img src="./static/videos/put the bowl on the plate /1.gif" alt="Bowl on plate - View 2"
+                  style="width: 100%; height: auto;">
+              </div>
+              <div class="column is-3">
+                <img src="./static/videos/put the bowl on the plate /2.gif" alt="Bowl on plate - View 3"
+                  style="width: 100%; height: auto;">
+              </div>
+              <div class="column is-3">
+                <img src="./static/videos/put the bowl on the plate /3.gif" alt="Bowl on plate - View 4"
+                  style="width: 100%; height: auto;">
+              </div>
+            </div>
+          </div>
+
+          <!-- Task 4: Put the cream cheese in the bowl -->
+          <div class="content">
+            <h3 class="title is-5">Task: Put the cream cheese in the bowl</h3>
+            <div class="columns is-multiline is-centered">
+              <div class="column is-3">
+                <img src="./static/videos/put the cream cheese in the bowl/0.gif" alt="Cream cheese - View 1"
+                  style="width: 100%; height: auto;">
+              </div>
+              <div class="column is-3">
+                <img src="./static/videos/put the cream cheese in the bowl/1.gif" alt="Cream cheese - View 2"
+                  style="width: 100%; height: auto;">
+              </div>
+              <div class="column is-3">
+                <img src="./static/videos/put the cream cheese in the bowl/2.gif" alt="Cream cheese - View 3"
+                  style="width: 100%; height: auto;">
+              </div>
+              <div class="column is-3">
+                <img src="./static/videos/put the cream cheese in the bowl/3.gif" alt="Cream cheese - View 4"
+                  style="width: 100%; height: auto;">
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Video Gallery Section -->
+  <section class="section" id="real-world-experiments">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Real world experiments</h2>
+
+          <!-- Task 1: Put bowl on stove -->
+          <div class="content">
+            <h3 class="title is-5">Task: Pick the black block into the basket</h3>
+            <div class="columns is-multiline is-centered">
+              <div class="column is-4">
+                <video src="./static/videos/real-record-video/1.mov" autoplay muted loop playsinline
+                  style="width: 100%; height: auto;"></video>
+                <p class="has-text-centered" style="margin-top: 0.5rem;">Demo 1</p>
+              </div>
+
+              <div class="column is-4">
+                <video src="./static/videos/real-record-video/2.mov" autoplay muted loop playsinline
+                  style="width: 100%; height: auto;"></video>
+                <p class="has-text-centered" style="margin-top: 0.5rem;">Demo 2</p>
+              </div>
+
+              <div class="column is-4">
+                <video src="./static/videos/real-record-video/3.mov" autoplay muted loop playsinline
+                  style="width: 100%; height: auto;"></video>
+                <p class="has-text-centered" style="margin-top: 0.5rem;">Demo 3</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="section" id="novel-view-generalization">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-max-desktop">
+          <h2 class="title is-3">Novel view generalization</h2>
+          <div class="content has-text-justified">
+            <img src="./static/images/newcamerapose.png" alt="Novel View Generalization" height="100%">
+            <p>
+              All models were trained on fixed global views but tested on a novel local viewpoint. Our model generates a
+              consistent 3D scene from the unseen view, which significantly outperforms baselines.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="baselines-comparison">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-max-desktop">
+          <h2 class="title is-3">Baselines comparison</h2>
+          <div class="content has-text-justified">
+            <img src="./static/images/compare_opensora.png" alt="Baselines Comparison" height="100%">
+            <p>
+              We use the <strong>OpenSora</strong> backbone (T2V + image conditioned head) and fine-tune it on our robot dataset as a video generation baseline. Here is the visualization of the generation results. We can see that OpenSora performs inconsistency during rollouts. 
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        <a class="icon-link" href="." class="external-link" disabled>
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              Anonymous submission to ICML 2026.
+            </p>
+            <p style="font-size: 0.8em; color: #999;">
+              Website template from <a href="https://github.com/nerfies/nerfies.github.io"
+                style="color: #999;">Nerfies</a> under CC BY-SA 4.0 license.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
